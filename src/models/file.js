@@ -15,6 +15,7 @@ const FileSchema = new mongoose.Schema(
 		protocolLink: { type: String },
 		dynamicLinks: { type: Array },
 		cid: { type: String },
+		contractAddress: { type: String },
 	},
 	{
 		timestamps: true,
