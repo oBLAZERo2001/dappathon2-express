@@ -86,11 +86,16 @@ const uploadFile = async (req, res) => {
 
 		console.log(file);
 
-		// await fs.unlink(localFilePath, (err) => {
-		// 	if (err) {
-		// 		console.error(err);
-		// 	}
-		// });
+		await fs.unlink(localFilePath, (err) => {
+			if (err) {
+				console.error(err);
+			}
+		});
+		await fs.unlink(localencryptFilePath, (err) => {
+			if (err) {
+				console.error(err);
+			}
+		});
 
 		res.status(200).json({ file });
 	} catch (error) {
@@ -135,6 +140,18 @@ const downloadFile = async (req, res) => {
 			if (err) {
 				console.error("File download error:", err);
 				res.status(404).send("File not found");
+			} else {
+				fs.unlink(downloadedFilePath, (err) => {
+					if (err) {
+						console.error(err);
+					} else {
+						fs.unlink(decryptedFilePath, (err) => {
+							if (err) {
+								console.error(err);
+							}
+						});
+					}
+				});
 			}
 		});
 	} catch (error) {
