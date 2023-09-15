@@ -12,9 +12,9 @@ const chain = "ethereum";
 
 const accessControlConditions = (contractAddress) => [
 	{
-		contractAddress,
+		contractAddress: 0x0b22c83a97930329b3426fa0675ba38fcc57ba87,
 		standardContractType: "",
-		chain,
+		chain: "ethereum",
 		method: "eth_getBalance",
 		parameters: [":userAddress", "latest"],
 		returnValueTest: {
@@ -29,6 +29,10 @@ const uploadFile = async (req, res) => {
 		const localFilePath = uuidv4();
 		const { buffer, originalname, mimetype } = req.file;
 		const { name, description, address } = req.body;
+		console.log("++++++++++++++++++++++++++++++++++++++++++++++++");
+
+		console.log(address);
+		console.log("++++++++++++++++++++++++++++++++++++++++++++++++");
 
 		await fs.writeFile(localFilePath, buffer, (err) => {
 			if (err) {
@@ -95,6 +99,14 @@ const uploadFile = async (req, res) => {
 				console.error(err);
 			}
 		});
+
+		const decryptedData = await spheron.decryptUpload({
+			authSig,
+			ipfsCid: uploadResponse.cid,
+			litNodeClient: client,
+		});
+
+		console.log(decryptedData);
 
 		res.status(200).json({ file });
 	} catch (error) {
