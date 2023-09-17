@@ -71,6 +71,7 @@ const uploadFile = async (req, res) => {
 		});
 
 		const file = new Crypter({
+			user_id: req.user._id,
 			filename: originalname,
 			contentType: mimetype,
 			name,
@@ -106,7 +107,9 @@ const uploadFile = async (req, res) => {
 
 const getFiles = async (req, res) => {
 	try {
-		const files = await Crypter.find({});
+		const files = await Crypter.find({
+			user_id: req.user._id,
+		});
 		res.json(files);
 	} catch (error) {
 		console.error("Error fetching file list:", error);

@@ -1,4 +1,3 @@
-const { namehash } = require("ethers");
 const { Token } = require("../models/token");
 
 const addToken = async (req, res) => {
@@ -12,7 +11,7 @@ const addToken = async (req, res) => {
 		const token = Token.create({
 			address,
 			name,
-			// user_id: req.user._id,
+			user_id: req.user._id,
 		});
 
 		return res.status(200).json(token);
@@ -23,7 +22,9 @@ const addToken = async (req, res) => {
 };
 const getTokens = async (req, res) => {
 	try {
-		const tokens = await Token.find();
+		const tokens = await Token.find({
+			user_id: req.user._id,
+		});
 
 		res.status(200).json({ tokens });
 	} catch (error) {

@@ -13,7 +13,7 @@ const TokenSchema = new mongoose.Schema(
 		members: {
 			type: Array,
 		},
-		user_Id: { type: String, reqired: false },
+		user_id: { type: mongoose.Types.ObjectId, required: true },
 	},
 	{
 		timestamps: true,

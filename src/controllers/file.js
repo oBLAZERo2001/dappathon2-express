@@ -77,6 +77,7 @@ const uploadFile = async (req, res) => {
 		});
 
 		const file = new File({
+			user_id: req.user._id,
 			filename: originalname,
 			contentType: mimetype,
 			name,
@@ -100,14 +101,6 @@ const uploadFile = async (req, res) => {
 			}
 		});
 
-		const decryptedData = await spheron.decryptUpload({
-			authSig,
-			ipfsCid: uploadResponse.cid,
-			litNodeClient: client,
-		});
-
-		console.log(decryptedData);
-
 		res.status(200).json({ file });
 	} catch (error) {
 		console.error("Error uploading file:", error);
@@ -117,7 +110,9 @@ const uploadFile = async (req, res) => {
 
 const getFiles = async (req, res) => {
 	try {
-		const files = await File.find({});
+		const files = await File.find({
+			user_id: req.user._id,
+		});
 		res.json(files);
 	} catch (error) {
 		console.error("Error fetching file list:", error);
